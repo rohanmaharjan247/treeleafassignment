@@ -1,0 +1,10 @@
+{
+  "/employeeapi": {
+    "target": "http://dummy.restapiexample.com/",
+    "secure": false,
+    "pathRewrite": {
+      "^/employeeapi": ""
+    },
+    "changeOrigin": true
+  }
+}

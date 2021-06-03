@@ -1,0 +1,111 @@
+<div
+  class="overlay d-flex justify-content-center align-items-center"
+  *ngIf="actionResult"
+>
+  <div class="spinner-border" role="status">
+    <span class="sr-only"></span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-title mb-2">
+      <span class="employee-heading h1">Employee Statistics</span>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-4 col-lg-4 col-lg-4">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title> Total Employees </mat-card-title>
+            <mat-card-subtitle>
+              <span *ngIf="!loadingResults; else loading">
+                {{ employeeList.length }}
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-4 col-lg-4">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title> Average Salary</mat-card-title>
+            <mat-card-subtitle>
+              <span *ngIf="!loadingResults; else loading">
+                {{ avgSalary | currency: "Rs. " }}
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-4 col-lg-4">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Average Age </mat-card-title>
+            <mat-card-subtitle>
+              <span *ngIf="!loadingResults; else loading">
+                {{ avgAge | number: "1.0-0" }}
+              </span>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content> </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-2">
+  <div class="card-body">
+    <div class="card-title mb-2">
+      <span class="employee-heading h1">Employee List</span>
+    </div>
+    <div class="row" *ngIf="!loadingResults; else progressbar">
+      <div
+        class="col-sm-12 col-md-4 col-lg-3 col-xl-3 mt-2"
+        *ngFor="let employee of employeeList"
+      >
+        <mat-card>
+          <mat-card-header>
+            <!-- <div mat-card-avatar class="header-image"></div> -->
+            <img mat-card-avatar src="assets/images/img_avatar.png">
+            <mat-card-title>{{ employee.employee_name }}</mat-card-title>
+            <mat-card-subtitle
+              >Age: {{ employee.employee_age }} yrs |
+              {{
+                employee.employee_salary | currency: "Rs. "
+              }}</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-actions class="text-end">
+            <a
+              mat-stroked-button
+              [routerLink]="['/employee/edit/', employee.id]"
+              color="accent"
+              [disabled]="actionResult"
+              ><mat-icon>edit</mat-icon></a
+            >
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="removeEmployee(employee.id)"
+              color="warn"
+              [disabled]="actionResult"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="spinner-border text-success text-center h1" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-template>
+<ng-template #progressbar>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <div class="text-center">{{ loadingText }}</div>
+</ng-template>

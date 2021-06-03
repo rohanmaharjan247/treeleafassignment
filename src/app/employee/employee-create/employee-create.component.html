@@ -1,0 +1,159 @@
+<div class="card">
+  <div class="card-body">
+    <h2 class="heading-2">{{ actionText }} Employee</h2>
+    <hr />
+    <ng-container *ngIf="!loadingEmployee; else progressbar">
+      <form
+        [formGroup]="employeeForm"
+        class="row"
+        #formDir="ngForm"
+        (ngSubmit)="createEmployee(formDir)"
+      >
+        <ng-container formArrayName="name">
+          <ng-container *ngFor="let fName of fullName.controls; index as i">
+            <div [formGroupName]="i" class="row">
+              <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="firstName"
+                    placeholder="First Name"
+                    required
+                  />
+                <mat-error *ngIf="fullName.controls[0].get('firstName')?.hasError('required')">
+                  First Name is required.
+                </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>Middle Name</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="middleName"
+                    placeholder="Middle Name"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="lastName"
+                    placeholder="Last Name"
+                    required
+                  />
+                  <mat-error *ngIf="fullName.controls[0].get('lastName')?.hasError('required')">
+                    Last Name is required.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Salary</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="salary"
+                placeholder="Salary"
+                required
+              />
+              <mat-error
+                *ngIf="employeFormControls.salary.hasError('required')"
+              >
+                Salary is required
+              </mat-error>
+              <mat-error *ngIf="employeFormControls.salary.hasError('pattern')">
+                Salary must be a number
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Age</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="age"
+                placeholder="Age"
+                required
+              />
+              <mat-error *ngIf="employeFormControls.age.hasError('required')">
+                Age is required
+              </mat-error>
+              <mat-error *ngIf="employeFormControls.age.hasError('pattern')">
+                Age must be a number
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12 text-end">
+          <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="employeeForm.invalid || savingEmployee"
+          >
+            <span *ngIf="!savingEmployee; else loading">Save</span>
+          </button>
+          <button
+            mat-flat-button
+            color="warn"
+            type="button"
+            class="ms-2"
+            (click)="reset()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</div>
+<div class="card mt-2">
+  <div class="card-body">
+    <div class="card-title">
+      <span class="employee-heading h1"
+        >{{ employeedActionTitle }} Employees</span
+      >
+    </div>
+    <div class="row" *ngIf="insertedData.length > 0; else notFound">
+      <div
+        class="col-sm-12 col-md-4 col-lg-3 col-xl-3"
+        *ngFor="let inserted of insertedData"
+      >
+        <mat-card class="mt-2">
+          <mat-card-header>
+            <img mat-card-avatar src="assets/images/img_avatar.png">
+            <mat-card-title>{{ inserted.name }}</mat-card-title>
+            <mat-card-subtitle>Age: {{ inserted.age | number: '1.0-0'}} | {{ inserted.salary | currency: 'Rs. '}}</mat-card-subtitle>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="spinner-border text-success text-center" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</ng-template>
+<ng-template #progressbar>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <div class="text-center">{{ loadingText }}</div>
+</ng-template>
+<ng-template #notFound>
+  <div class="text-center">
+    Please {{actionText | lowercase}} data to display.
+  </div>
+</ng-template>
