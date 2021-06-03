@@ -162,7 +162,7 @@ export class EmployeeCreateComponent implements OnInit, OnDestroy {
             this._employeeService.setEmployeeList(data.data);
             this.savingEmployee = false;
             formDir.resetForm();
-            this.reset();
+            this.reset(formDir);
             Swal.fire('Updated Successfully');
           },
           (err) => {
@@ -180,6 +180,7 @@ export class EmployeeCreateComponent implements OnInit, OnDestroy {
             } else {
               Swal.fire(err.message);
             }
+            this.savingEmployee = false;
           }
         );
     } else {
@@ -203,7 +204,7 @@ export class EmployeeCreateComponent implements OnInit, OnDestroy {
             this._employeeService.setEmployeeList(data.data);
             this.savingEmployee = false;
             formDir.resetForm();
-            this.reset();
+            this.reset(formDir);
             Swal.fire('Created Successfully');
           },
           (err) => {
@@ -221,6 +222,8 @@ export class EmployeeCreateComponent implements OnInit, OnDestroy {
             } else {
               Swal.fire(err.message);
             }
+            this.savingEmployee = false;
+
           }
         );
     }
@@ -299,7 +302,8 @@ export class EmployeeCreateComponent implements OnInit, OnDestroy {
       );
   }
 
-  reset() {
+  reset(forDir:FormGroupDirective) {
+    forDir.resetForm();
     this.editMode = false;
     this.actionText = 'Add';
     this.employeedActionTitle = 'Added';
